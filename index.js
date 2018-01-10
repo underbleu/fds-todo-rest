@@ -35,7 +35,7 @@ async function addTodo(title) {
       complete: false
     }),
     headers: {
-      // 'Content-Type': 'application/json'
+      'Content-Type': 'application/json'
     }
   });
 }
