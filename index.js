@@ -29,26 +29,37 @@ addButtonEl.addEventListener('click', async e => {
 });
 
 async function addTodo(title) {
-  todos.push({
-    id: count++,
-    title,
-    complete: false
-  });
+  res = await fetch(`${API_URL}/todos`, {
+    method: 'post',
+    body: JSON.stringify({title, complete:false}),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  refreshTodoList();
 }
 
 async function removeTodo(todoId) {
-  todos = todos.filter(t => t.id !== todoId);
+  return fetch(`${API_URL}/todos/${todoId}`, {
+    method: 'delete'
+  });
 }
 
 async function updateTodo(todoId, complete) {
-  for (let todo of todos) {
-    if (todo.id === todoId) {
-      todo.complete = complete;
+  return fetch(`${API_URL}/todos/${todoId}`, {
+    method: 'patch',
+    body: JSON.stringify({complete}),
+    headers: {
+      'Content-Type': 'application/json'
     }
-  }
+  });
 }
 
 async function refreshTodoList() {
+  // REST API에서 할 일 목록 가져오기
+  const res = await fetch(`${API_URL}/todos`);
+  const todos = await res.json();
+
   // 현재 화면의 할 일 목록 삭제
   todoListEl.innerHTML = '';
 
